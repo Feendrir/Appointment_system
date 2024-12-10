@@ -1,0 +1,42 @@
+  /* #sidenav-main {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: #fff;
+    z-index: 1050;
+    overflow-y: auto;
+  }
+  
+  #sidenav-main.show {
+    display: block;
+  }
+  
+  body.g-sidenav-pinned #sidenav-main {
+    display: block;
+  }
+   */
+
+   .icon-sidebar {
+    filter: invert(1); /* Membuat ikon putih */
+  }
+  .nav-link.active .icon-sidebar {
+    filter: invert(0); /* Ikon tetap sesuai saat tidak aktif */
+  }
+
+  .icon-sidebar {
+    filter: invert(0); /* Ikon default */
+    transition: all 0.3s ease;
+  }
+  .nav-link.active .icon-sidebar {
+    filter: invert(1); /* Ubah ikon menjadi putih saat aktif */
+  }
+
+  .nav-link.active .icon-sidebar {
+    fill: white;
+  }
+  
+
+  
