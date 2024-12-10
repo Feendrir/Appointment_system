@@ -36,6 +36,7 @@ $routes->post('/obat/store', 'ObatController::store');
 $routes->get('/obat/edit/(:num)', 'ObatController::edit/$1'); 
 $routes->post('/obat/update/(:num)', 'ObatController::update/$1'); 
 $routes->post('/obat/delete/(:num)', 'ObatController::delete/$1'); 
+
 // Kelola Poli
 $routes->get('/poli', 'PoliController::index');
 $routes->get('/poli/create', 'PoliController::create'); 

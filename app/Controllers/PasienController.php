@@ -54,7 +54,7 @@ class PasienController extends BaseController
         $noRm = $yearMonth . '-' . $nextNoRm;
 
         $data = [
-            'nama_pasien' => $this->request->getPost('nama_pasien'),
+            'nama' => $this->request->getPost('nama'),
             'alamat' => $this->request->getPost('alamat'),
             'no_hp' => $this->request->getPost('no_hp'),
             'no_ktp' => $this->request->getPost('no_ktp'),

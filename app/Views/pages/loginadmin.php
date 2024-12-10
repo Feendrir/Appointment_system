@@ -19,8 +19,8 @@
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-5 text-center mx-auto">
-              <h1 class="text-white mb-2 mt-5">Admin Login</h1>
-              <p class="text-lead text-white">Login to manage the system.</p>
+              <h1 class="text-white mb-2 mt-5">Selamat Datang!</h1>
+              <p class="text-lead text-white">Masuk untuk mengelola sistem.</p>
             </div>
           </div>
         </div>
