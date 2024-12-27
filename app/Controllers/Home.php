@@ -25,20 +25,26 @@ class Home extends BaseController
     {
         $username = $this->request->getPost('nama');
         $password = $this->request->getPost('alamat');
-
+    
+        // Cari data dokter berdasarkan nama dan alamat
         $dokter = $this->dokterModel->where('nama', $username)->where('alamat', $password)->first();
-
+    
         if ($dokter) {
+            // Set session dengan ID dokter
             session()->set([
                 'isLoggedIn' => true,
                 'userType' => 'dokter',
+                'userId' => $dokter['id'], // Menyimpan ID dokter
                 'userName' => $dokter['nama'],
             ]);
+    
+            // Redirect ke dashboard dokter
             echo "<script>alert('Login berhasil! Selamat datang, {$dokter['nama']}'); window.location.href='/dashboard-dokter';</script>";
         } else {
             echo "<script>alert('Login gagal! Periksa username dan alamat.'); window.location.href='/';</script>";
         }
     }
+    
 
     public function dashboardDokter()
     {
@@ -48,18 +54,18 @@ class Home extends BaseController
 
         return view('pages/dashboard-dokter', ['title' => 'Dashboard Dokter', 'userName' => session()->get('userName')]);
     }
-
     public function loginPatient()
     {
         $username = $this->request->getPost('nama');
         $password = $this->request->getPost('alamat');
-
+    
         $pasien = $this->pasienModel->where('nama', $username)->where('alamat', $password)->first();
-
+    
         if ($pasien) {
             session()->set([
                 'isLoggedIn' => true,
                 'userType' => 'pasien',
+                'userId' => $pasien['id'], // Pastikan ID pasien disimpan
                 'userName' => $pasien['nama'],
             ]);
             echo "<script>alert('Login berhasil! Selamat datang, {$pasien['nama']}'); window.location.href='/dashboard-pasien';</script>";
@@ -67,15 +73,26 @@ class Home extends BaseController
             echo "<script>alert('Login gagal! Periksa nama dan alamat.'); window.location.href='/';</script>";
         }
     }
+      
 
     public function dashboardPasien()
     {
+        //dd(session()->get());
+
         if (!session()->get('isLoggedIn') || session()->get('userType') !== 'pasien') {
             echo "<script>alert('Anda harus login sebagai pasien.'); window.location.href='/';</script>";
         }
-
-        return view('pages/dashboard-pasien', ['title' => 'Dashboard Pasien', 'userName' => session()->get('userName')]);
-    }
+    
+        $idPasien = session()->get('userId');
+        if (!$idPasien) {
+            echo "<script>alert('Session tidak valid, silakan login ulang.'); window.location.href='/';</script>";
+        }
+    
+        return view('pages/dashboard-pasien', [
+            'title' => 'Dashboard Pasien',
+            'userName' => session()->get('userName'),
+        ]);
+    }    
 
     public function registerPage()
     {

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <?= $this->include('components/header'); ?>
-
 <body class="g-sidenav-show bg-gray-100">
   <?= $this->include('components/sidebar_dokter'); ?>
   <main class="main-content position-relative border-radius-lg">

@@ -10,13 +10,22 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-        <a class="nav-link <?= (uri_string() == 'dashboard') ? 'active' : '' ?>" href="#">
+        <a class="nav-link <?= (uri_string() == 'dashboard-pasien') ? 'active' : '' ?>" href="/dashboard-pasien">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <img src="<?= base_url('assets/icons/dashboard-icon.svg'); ?>" alt="icon" class="icon-sidebar" style="width: 18px;">
           </div>
           <span class="nav-link-text ms-1">Dashboard</span>
         </a>
         </li>
+        <!-- Jadwal Periksa -->
+        <li class="nav-item">
+          <a class="nav-link <?= (strpos(uri_string(), 'daftar-poli') !== false) ? 'active' : '' ?>" href="<?= base_url('pasien/daftar-poli'); ?>">
+              <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <img src="<?= base_url('assets/icons/list-icon.svg'); ?>" alt="icon" class="icon-sidebar" style="width: 18px;">
+              </div>
+              <span class="nav-link-text ms-1">Daftar Poli</span>
+          </a>
+      </li>
       </ul>
     </div>
     <div class="sidenav-footer mx-3 ">

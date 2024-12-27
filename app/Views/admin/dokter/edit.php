@@ -17,7 +17,6 @@
               <label for="nama" class="form-label">Nama Dokter</label>
               <input type="text" class="form-control" id="nama" name="nama" value="<?= esc($dokter['nama']) ?>" placeholder="Masukkan nama dokter" required>
             </div>
-
             <div class="mb-4">
               <label for="id_poli" class="form-label">Pilih Poli</label>
               <select class="form-select" id="id_poli" name="id_poli" required>
@@ -27,7 +26,6 @@
                 <?php endforeach; ?>
               </select>
             </div>
-
             <div class="mb-4">
               <label for="no_hp" class="form-label">Nomor Telepon</label>
               <input type="text" class="form-control" id="no_hp" name="no_hp" value="<?= esc($dokter['no_hp']) ?>" placeholder="Masukkan nomor telepon" required>

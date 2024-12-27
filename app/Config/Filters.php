@@ -34,6 +34,8 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'authDokter' => \App\Filters\AuthDokterFilter::class,
+        'authPasien'  => \App\Filters\AuthPasienFilter::class,
     ];
 
     /**
@@ -104,4 +106,5 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [];
+    
 }

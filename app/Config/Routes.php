@@ -60,3 +60,64 @@ $routes->post('/pasien/store', 'PasienController::store');
 $routes->get('/pasien/edit/(:num)', 'PasienController::edit/$1'); 
 $routes->post('/pasien/update/(:num)', 'PasienController::update/$1');
 $routes->post('/pasien/delete/(:num)', 'PasienController::delete/$1');
+
+
+// Dokter Setting Routes
+$routes->get('/dokter/profile', 'DokterController::profile', ['filter' => 'authDokter']);
+$routes->get('/dokter/edit', 'DokterController::editProfile', ['filter' => 'authDokter']);
+$routes->post('/dokter/updateProfile', 'DokterController::updateProfile', ['filter' => 'authDokter']);
+$routes->get('/dokter/setting', 'DokterController::setting', ['filter' => 'authDokter']);
+$routes->post('/dokter/setting/update', 'DokterController::updateProfile', ['filter' => 'authDokter']);
+
+
+// Dokter Jadwal 
+$routes->get('/dokter/jadwal', 'DokterController::jadwal', ['filter' => 'authDokter']);
+$routes->get('/dokter/jadwal/create', 'DokterController::createJadwal', ['filter' => 'authDokter']);
+$routes->post('/dokter/jadwal/store', 'DokterController::storeJadwal', ['filter' => 'authDokter']);
+$routes->get('/dokter/jadwal/edit/(:num)', 'DokterController::editJadwal/$1', ['filter' => 'authDokter']);
+$routes->post('/dokter/jadwal/update/(:num)', 'DokterController::updateJadwal/$1', ['filter' => 'authDokter']);
+$routes->post('/dokter/jadwal/delete/(:num)', 'DokterController::deleteJadwal/$1', ['filter' => 'authDokter']);
+
+
+$routes->group('dokter', ['filter' => 'authDokter'], function($routes) {
+    $routes->get('periksa', 'DokterController::daftarPasien'); // Daftar pasien yang akan diperiksa
+    $routes->get('periksa/detail/(:num)', 'DokterController::detailPasien/$1'); // Detail pasien yang akan diperiksa
+    $routes->post('periksa/store', 'DokterController::storePeriksa'); // Simpan hasil pemeriksaan
+});
+
+
+
+//Daftar Poli
+// $routes->get('pasien/daftar-poli', 'PasienController::daftarPoli'); // Index daftar riwayat poli
+// $routes->get('pasien/daftar-poli/create', 'PasienController::createDaftarPoli'); // View tambah pendaftaran poli
+// $routes->post('pasien/daftar-poli/store', 'PasienController::storeDaftarPoli'); // Simpan pendaftaran poli
+// $routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailDaftarPoli/$1'); // Detail pendaftaran poli
+// $routes->get('/pasien/daftar-poli/jadwal/(:num)', 'PasienController::getJadwalByPoli/$1');
+
+$routes->group('pasien', ['filter' => 'authPasien'], function ($routes) {
+    $routes->get('daftar-poli', 'PasienController::daftarPoli'); // Index daftar riwayat poli
+    $routes->get('daftar-poli/create', 'PasienController::createDaftarPoli'); // View tambah pendaftaran poli
+    $routes->post('daftar-poli/store', 'PasienController::storeDaftarPoli'); // Simpan pendaftaran poli
+    $routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailPeriksa/$1');
+});
+$routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailPeriksa/$1', ['filter' => 'authPasien']);
+
+
+// Riwayat Pasien
+$routes->get('dokter/riwayat-pasien', 'DokterController::riwayatPasien', ['filter' => 'authDokter']); // Halaman index riwayat pasien
+$routes->get('dokter/riwayat-pasien/detail/(:num)', 'DokterController::detailPeriksaPasien/$1', ['filter' => 'authDokter']); // Detail periksa pasien
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

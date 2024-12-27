@@ -33,10 +33,10 @@
               <div class="card-header text-center pt-4 pb-4">
                 <ul class="nav nav-pills justify-content-between w-100" id="loginTabs" role="tablist" style="padding: 0 10px;">
                   <li class="nav-item w-50">
-                    <button class="nav-link active w-100 bg-primary text-white" id="doctor-tab" data-bs-toggle="tab" data-bs-target="#doctor-login" type="button" role="tab" aria-controls="doctor-login" aria-selected="true">Doctor</button>
+                    <button class="nav-link active w-100 bg-primary text-white" id="doctor-tab" data-bs-toggle="tab" data-bs-target="#doctor-login" type="button" role="tab" aria-controls="doctor-login" aria-selected="true">Dokter</button>
                   </li>
                   <li class="nav-item w-50">
-                    <button class="nav-link w-100 text-dark" id="patient-tab" data-bs-toggle="tab" data-bs-target="#patient-login" type="button" role="tab" aria-controls="patient-login" aria-selected="false">Patient</button>
+                    <button class="nav-link w-100 text-dark" id="patient-tab" data-bs-toggle="tab" data-bs-target="#patient-login" type="button" role="tab" aria-controls="patient-login" aria-selected="false">Pasien</button>
                   </li>
                 </ul>
               </div>
@@ -79,8 +79,8 @@
                                   <button type="submit" class="btn btn-primary w-100">Masuk</button>
                               </div>
                               <div class="text-center mt-3">
-                                  <span class="text-dark text-sm">Don't have an account? </span>
-                                  <a href="/patient/register" class="text-primary fw-bold">Register</a>
+                                  <span class="text-dark text-sm">Pasien baru ? </span>
+                                  <a href="/patient/register" class="text-primary fw-bold">Daftar</a>
                               </div>
                           </form>
                       </div>
