@@ -1,60 +1,100 @@
-# CodeIgniter 4 Framework
+@ -1,2 +1,100 @@
+# Appointment_system
 
-## What is CodeIgniter?
+Sistem Appointment ini adalah aplikasi berbasis web untuk membantu pengelolaan jadwal periksa, data pasien, dokter, serta berbagai fitur lain yang berkaitan dengan sistem rumah sakit.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## **Fitur Utama**
+- Login sebagai Dokter atau Pasien.
+- Registrasi pasien baru dengan nomor rekam medis otomatis.
+- Kelola jadwal periksa dokter dan daftar poli.
+- Tambah, edit, dan hapus data pasien, dokter, dan jadwal.
+- Dashboard admin untuk pengelolaan data.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## **Persyaratan Sistem**
+- Web Server: Apache atau Nginx.
+- PHP: Versi 8.0 atau lebih baru.
+- Database: MySQL.
+- Composer: Untuk instalasi dependensi PHP.
+- Git: Untuk pengelolaan repository.
+  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## **Instalasi dan Konfigurasi**
 
-## Important Change with index.php
+### **1. Clone Repository**
+1. Clone proyek ini dari GitHub ke direktori lokal Anda:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+   git clone https://github.com/Feendrir/Appointment_system.git
+   cd Appointment_system
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### **2. Persiapan Database**
+1. Buat database baru di MySQL dengan nama:
+   h_appointment_system
 
-## Repository Management
+2. Import file database yang ada di folder /database/h_appointment_system.sql:
+   - Gunakan phpMyAdmin:
+     - Login ke phpMyAdmin.
+     - Pilih database h_appointment_system.
+     - Klik tab Import, pilih file database/h_appointment_system.sql, lalu klik Go.
+   - Atau gunakan Command Line:
+     - mysql -u [username] -p h_appointment_system < database/h_appointment_system.sql
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+### **3. Konfigurasi Environment**
+1. Duplikat file env menjadi .env :
+   cp env .env
+2. Edit file .env dan sesuaikan konfigurasi database Anda:
+   - database.default.hostname = localhost
+   - database.default.database = h_appointment_system
+   - database.default.username = root
+   - database.default.password = [kosongkan jika tidak ada password]
+   - database.default.DBDriver = MySQLi
 
-## Contributing
 
-We welcome contributions from the community.
+### **4. Instal Dependensi**
+1. Pastikan Anda memiliki Composer terinstal. Jalankan perintah berikut untuk menginstal dependensi:
+   composer install
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
 
-## Server Requirements
+### **5. Jalankan Aplikasi**
+1. Gunakan perintah berikut untuk menjalankan aplikasi:
+   php spark serve
+   Aplikasi akan berjalan di: http://localhost:8080
+ 
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+## **Struktur Folder**
+- /app                      Berisi controller, model, dan view aplikasi.
+- /public	                  Folder publik untuk akses CSS, JS, dan gambar.
+- /database	                File SQL untuk setup database.
+- /writable	                Cache dan log aplikasi.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## **Login Akun Default**
+1. Admin:
+   - Username: admin
+   - Password: admin123
+
+ 2. Dokter:
+    - Username dan password: Sesuai data tabel dokter.
+
+4. Pasien:
+   - Username dan password: Sesuai data tabel pasien.
+
+
+## **Panduan Penggunaan**
+1. Admin dapat mengelola data dokter, pasien, poli, dan jadwal periksa melalui dashboard.
+2. Dokter dapat login untuk melihat dan mengelola jadwal periksa mereka.
+3. Pasien dapat login untuk melihat riwayat periksa dan informasi poli.
+
+
+## **Catatan**
+- Pastikan semua file di folder /public/ dapat diakses oleh web server.
+- Gunakan folder /writable/ untuk menyimpan cache dan log dengan izin writable (chmod 777 jika diperlukan).
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
