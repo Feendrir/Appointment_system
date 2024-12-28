@@ -79,10 +79,12 @@ $routes->post('/dokter/jadwal/update/(:num)', 'DokterController::updateJadwal/$1
 $routes->post('/dokter/jadwal/delete/(:num)', 'DokterController::deleteJadwal/$1', ['filter' => 'authDokter']);
 
 
-$routes->group('dokter', ['filter' => 'authDokter'], function($routes) {
+$routes->group('dokter', ['filter' => 'authDokter'], function ($routes) {
     $routes->get('periksa', 'DokterController::daftarPasien'); // Daftar pasien yang akan diperiksa
     $routes->get('periksa/detail/(:num)', 'DokterController::detailPasien/$1'); // Detail pasien yang akan diperiksa
     $routes->post('periksa/store', 'DokterController::storePeriksa'); // Simpan hasil pemeriksaan
+    $routes->get('periksa/edit/(:num)', 'DokterController::editPeriksa/$1'); // Edit hasil pemeriksaan
+    $routes->post('periksa/update', 'DokterController::updatePeriksa'); // Update hasil pemeriksaan
 });
 
 

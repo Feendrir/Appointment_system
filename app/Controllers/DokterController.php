@@ -386,93 +386,33 @@ class DokterController extends BaseController
     public function daftarPasien()
     {
         $idDokter = session()->get('userId'); // Ambil ID dokter dari sesi
-
+    
         $daftarPasien = $this->daftarPoliModel
-            ->select('daftar_poli.*, pasien.nama AS nama_pasien, poli.nama_poli')
+            ->select('
+                daftar_poli.id,
+                pasien.nama AS nama_pasien,
+                poli.nama_poli,
+                daftar_poli.keluhan,
+                periksa.id AS id_periksa,
+                periksa.tanggal_periksa
+            ')
             ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left')
             ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
             ->join('jadwal_periksa', 'jadwal_periksa.id = daftar_poli.id_jadwal', 'left')
+            ->join('periksa', 'periksa.id_daftar_poli = daftar_poli.id', 'left') // Join ke tabel periksa
             ->where('jadwal_periksa.id_dokter', $idDokter)
-            ->whereNotIn('daftar_poli.id', function ($builder) {
-                return $builder->select('id_daftar_poli')->from('periksa');
-            })
             ->findAll();
-
+    
         $data = [
             'title' => 'Daftar Pasien',
             'breadcrumb' => ['Periksa', 'Daftar Pasien'],
             'breadcrumbLinks' => ['/dokter/periksa'],
             'daftarPasien' => $daftarPasien,
         ];
-
+    
         return view('dokter/periksa/index', $data);
-    }
+    }    
 
-    // Detail pasien yang akan diperiksa
-    // public function detailPasien($id)
-    // {
-    //     $pasien = $this->daftarPoliModel
-    //         ->select('daftar_poli.*, pasien.nama AS nama_pasien, poli.nama_poli')
-    //         ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left')
-    //         ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
-    //         ->where('daftar_poli.id', $id)
-    //         ->first();
-    
-    //     if (!$pasien) {
-    //         return redirect()->to('/dokter/periksa')->with('error', 'Data pasien tidak ditemukan.');
-    //     }
-    
-    //     $obat = $this->obatModel->findAll();
-    
-    //     $data = [
-    //         'title' => 'Detail Pemeriksaan',
-    //         'breadcrumb' => ['Periksa Pasien', 'Detail Pemeriksaan'],
-    //         'breadcrumbLinks' => ['/dokter/periksa', '/dokter/periksa/detail'],
-    //         'pasien' => $pasien,
-    //         'obat' => $obat,
-    //     ];
-    
-    //     return view('dokter/periksa/detail', $data);
-    // }
-    
-    // public function storePeriksa()
-    // {
-    //     $idDaftarPoli = $this->request->getPost('id_daftar_poli');
-    //     $catatan = $this->request->getPost('catatan');
-    //     $biayaPeriksa = 150000; // Biaya periksa standar
-    //     $obatIds = $this->request->getPost('obat') ?? []; // Array ID obat
-    
-    //     // Validasi input
-    //     if (empty($catatan)) {
-    //         return redirect()->back()->withInput()->with('error', 'Catatan pemeriksaan wajib diisi.');
-    //     }
-    
-    //     // Hitung total harga obat
-    //     $totalHargaObat = 0;
-    //     if (!empty($obatIds)) {
-    //         $obat = $this->obatModel->whereIn('id', $obatIds)->findAll();
-    //         foreach ($obat as $item) {
-    //             $totalHargaObat += $item['harga'];
-    //         }
-    //     }
-    
-    //     // Total biaya = biaya periksa + total harga obat
-    //     $totalBiaya = $biayaPeriksa + $totalHargaObat;
-    
-    //     try {
-    //         // Simpan data pemeriksaan
-    //         $this->periksaModel->insert([
-    //             'id_daftar_poli' => $idDaftarPoli,
-    //             'tanggal_periksa' => date('Y-m-d'),
-    //             'catatan' => $catatan,
-    //             'biaya_periksa' => $totalBiaya,
-    //         ]);
-    
-    //         return redirect()->to('/dokter/periksa')->with('success', 'Pemeriksaan berhasil disimpan.');
-    //     } catch (\Exception $e) {
-    //         return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan saat menyimpan pemeriksaan.');
-    //     }
-    // }
     public function detailPasien($id)
     {
         $pasien = $this->daftarPoliModel
@@ -544,41 +484,121 @@ class DokterController extends BaseController
         }
     }
 
+// Fungsi untuk menampilkan halaman edit
+public function editPeriksa($idPeriksa)
+{
+    $periksa = $this->periksaModel
+        ->select('periksa.*, daftar_poli.keluhan, pasien.nama AS nama_pasien, poli.nama_poli')
+        ->join('daftar_poli', 'daftar_poli.id = periksa.id_daftar_poli', 'left')
+        ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left')
+        ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
+        ->where('periksa.id', $idPeriksa)
+        ->first();
+
+    if (!$periksa) {
+        return redirect()->to('/dokter/periksa')->with('error', 'Data pemeriksaan tidak ditemukan.');
+    }
+
+    $obat = $this->obatModel->findAll();
+
+    $data = [
+        'title' => 'Edit Pemeriksaan',
+        'periksa' => $periksa,
+        'obat' => $obat,
+        'selectedObat' => $this->detailPeriksaModel->where('id_periksa', $idPeriksa)->findAll(),
+    ];
+
+    return view('dokter/periksa/edit', $data);
+}
+
+// Fungsi untuk update data pemeriksaan
+public function updatePeriksa()
+{
+    $idPeriksa = $this->request->getPost('id_periksa');
+    $catatan = $this->request->getPost('catatan');
+    $biayaPeriksa = 150000; // Biaya periksa standar
+    $obatIds = $this->request->getPost('obat') ?? []; // Array ID obat
+
+    // Validasi input
+    if (empty($catatan)) {
+        return redirect()->back()->withInput()->with('error', 'Catatan pemeriksaan wajib diisi.');
+    }
+
+    // Hitung total harga obat
+    $totalHargaObat = 0;
+    if (!empty($obatIds)) {
+        $obat = $this->obatModel->whereIn('id', $obatIds)->findAll();
+        foreach ($obat as $item) {
+            $totalHargaObat += $item['harga'];
+        }
+    }
+
+    // Total biaya = biaya periksa + total harga obat
+    $totalBiaya = $biayaPeriksa + $totalHargaObat;
+
+    try {
+        // Update data pemeriksaan
+        $this->periksaModel->update($idPeriksa, [
+            'catatan' => $catatan,
+            'biaya_periksa' => $totalBiaya,
+        ]);
+
+        // Update data obat di tabel detail_periksa
+        $this->detailPeriksaModel->where('id_periksa', $idPeriksa)->delete();
+        foreach ($obatIds as $obatId) {
+            $this->detailPeriksaModel->insert([
+                'id_periksa' => $idPeriksa,
+                'id_obat' => $obatId,
+            ]);
+        }
+
+        return redirect()->to('/dokter/periksa')->with('success', 'Data pemeriksaan berhasil diperbarui.');
+    } catch (\Exception $e) {
+        return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan saat memperbarui data pemeriksaan.');
+    }
+}
+
     public function riwayatPasien()
     {
-        $idDokter = session()->get('userId'); // ID dokter dari sesi
-
-        $riwayatPasien = $this->periksaModel->getRiwayatPasienByDokter($idDokter);
-
+        $idDokter = session()->get('userId');
+    
+        $riwayatPasien = $this->daftarPoliModel
+            ->select('pasien.id as id_pasien, pasien.no_rm, pasien.no_ktp, pasien.nama, pasien.no_hp, pasien.alamat')
+            ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left')
+            ->join('jadwal_periksa', 'jadwal_periksa.id = daftar_poli.id_jadwal', 'left')
+            ->where('jadwal_periksa.id_dokter', $idDokter)
+            ->groupBy('pasien.id')
+            ->paginate(10); // Pastikan paginate() digunakan di sini
+    
         $data = [
             'title' => 'Riwayat Pasien',
             'breadcrumb' => ['Riwayat Pasien'],
             'breadcrumbLinks' => ['/dokter/riwayat-pasien'],
             'riwayatPasien' => $riwayatPasien,
+            'pager' => $this->daftarPoliModel->pager, // Kirim objek pager ke view
         ];
-
+    
         return view('dokter/riwayat_pasien/index', $data);
-    }
-
+    }    
+    
     public function detailPeriksaPasien($idPasien)
     {
         $idDokter = session()->get('userId'); // ID dokter dari sesi
-
+    
+        // Ambil detail periksa pasien berdasarkan ID pasien dan dokter
         $detailPeriksa = $this->periksaModel->getDetailRiwayatPeriksa($idPasien, $idDokter);
-
+    
         if (empty($detailPeriksa)) {
             return redirect()->to('/dokter/riwayat-pasien')->with('error', 'Riwayat periksa tidak ditemukan.');
         }
-
+    
         $data = [
             'title' => 'Detail Riwayat Periksa',
             'breadcrumb' => ['Riwayat Pasien', 'Detail'],
             'breadcrumbLinks' => ['/dokter/riwayat-pasien', '/dokter/riwayat-pasien/detail'],
             'detailPeriksa' => $detailPeriksa,
         ];
-
+    
         return view('dokter/riwayat_pasien/detail', $data);
-    }
-
-
+    }    
 }
