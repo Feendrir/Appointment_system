@@ -18,7 +18,6 @@
                 <div class="card-body">
                     <form action="/pasien/daftar-poli/store" method="post">
                         <?= csrf_field() ?>
-                        
                         <!-- No. RM -->
                         <div class="mb-3">
                             <label for="no_rm" class="form-label">No. Rekam Medis</label>
@@ -34,8 +33,6 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
-                        <!-- Pilih Jadwal -->
                         <!-- Pilih Jadwal -->
                         <div class="mb-3">
                             <label for="id_jadwal" class="form-label">Pilih Jadwal</label>
@@ -68,7 +65,7 @@
 
 <script>
 document.getElementById('id_poli').addEventListener('change', function () {
-    const idPoli = this.value;
+    const idPoli = this.value; // Ini harus ID poli, bukan ID jadwal
     const jadwalDropdown = document.getElementById('id_jadwal');
 
     // Reset jadwal options
@@ -76,10 +73,9 @@ document.getElementById('id_poli').addEventListener('change', function () {
 
     // Jika poli dipilih, lakukan AJAX untuk mendapatkan jadwal dokter
     if (idPoli) {
-        fetch(`/pasien/daftar-poli/jadwal/${idPoli}`)
+        fetch(`/pasien/daftar-poli/jadwal/${idPoli}`) // Pastikan ini menggunakan ID poli
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Debug response dari server
                 if (data.success && data.jadwal.length > 0) {
                     data.jadwal.forEach(j => {
                         const option = document.createElement('option');
@@ -103,6 +99,7 @@ document.getElementById('id_poli').addEventListener('change', function () {
             });
     }
 });
+
 
 </script>
 

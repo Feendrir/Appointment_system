@@ -19,9 +19,10 @@
                     <thead>
                         <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center" style="width: 5%;">No</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 25%;">Nama Pasien</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">Nama Pasien</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">Poli</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">Keluhan</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center" style="width: 15%;">Status</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
@@ -43,6 +44,13 @@
                                 </td>
                                 <td class="text-center">
                                     <?php if (!empty($pasien['id_periksa'])): ?>
+                                        <span class="badge bg-success">Sudah Diperiksa</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-warning">Belum Diperiksa</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if (!empty($pasien['id_periksa'])): ?>
                                         <!-- Tombol Edit jika sudah diperiksa -->
                                         <a href="<?= base_url('dokter/periksa/edit/' . $pasien['id_periksa']); ?>" class="btn btn-warning btn-sm">Edit</a>
                                     <?php else: ?>
@@ -54,7 +62,7 @@
                         <?php endforeach; ?>
                         <?php if (empty($daftarPasien)): ?>
                             <tr>
-                                <td colspan="5" class="text-center">Tidak ada data pemeriksaan.</td>
+                                <td colspan="6" class="text-center">Tidak ada data pemeriksaan.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

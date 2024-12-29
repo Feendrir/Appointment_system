@@ -88,20 +88,14 @@ $routes->group('dokter', ['filter' => 'authDokter'], function ($routes) {
 });
 
 
-
-//Daftar Poli
-// $routes->get('pasien/daftar-poli', 'PasienController::daftarPoli'); // Index daftar riwayat poli
-// $routes->get('pasien/daftar-poli/create', 'PasienController::createDaftarPoli'); // View tambah pendaftaran poli
-// $routes->post('pasien/daftar-poli/store', 'PasienController::storeDaftarPoli'); // Simpan pendaftaran poli
-// $routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailDaftarPoli/$1'); // Detail pendaftaran poli
-// $routes->get('/pasien/daftar-poli/jadwal/(:num)', 'PasienController::getJadwalByPoli/$1');
-
 $routes->group('pasien', ['filter' => 'authPasien'], function ($routes) {
     $routes->get('daftar-poli', 'PasienController::daftarPoli'); // Index daftar riwayat poli
     $routes->get('daftar-poli/create', 'PasienController::createDaftarPoli'); // View tambah pendaftaran poli
     $routes->post('daftar-poli/store', 'PasienController::storeDaftarPoli'); // Simpan pendaftaran poli
-    $routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailPeriksa/$1');
+    $routes->get('daftar-poli/detail/(:num)', 'PasienController::detailPeriksa/$1'); // Detail periksa
+    $routes->get('daftar-poli/jadwal/(:num)', 'PasienController::getJadwalByPoli/$1'); // Ambil jadwal berdasarkan poli
 });
+
 $routes->get('pasien/daftar-poli/detail/(:num)', 'PasienController::detailPeriksa/$1', ['filter' => 'authPasien']);
 
 

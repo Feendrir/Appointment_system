@@ -140,35 +140,23 @@ class PasienController extends BaseController
           return view('pasien/daftar_poli/index', $data);
       }
       
-    //   public function getJadwalByPoli($idPoli)
-    //   {
-    //       $jadwal = $this->jadwalModel
-    //           ->select('jadwal_periksa.id, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, dokter.nama as nama_dokter')
-    //           ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
-    //           ->where('dokter.id_poli', $idPoli) // Filter berdasarkan poli
-    //           ->where('jadwal_periksa.status', 'aktif') // Hanya jadwal aktif
-    //           ->findAll();
-    //           dd($jadwal);
-
+      public function getJadwalByPoli($idPoli)
+      {
+          $builder = $this->jadwalModel
+              ->select('jadwal_periksa.id, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, dokter.nama as nama_dokter, poli.nama_poli')
+              ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
+              ->join('poli', 'poli.id = dokter.id_poli', 'left')
+              ->where('poli.id', $idPoli) // Filter berdasarkan ID poli
+              ->where('jadwal_periksa.status', 'aktif');
       
-    //       if (!empty($jadwal)) {
-    //           return $this->response->setJSON(['success' => true, 'jadwal' => $jadwal]);
-    //       } else {
-    //           return $this->response->setJSON(['success' => true, 'jadwal' => []]);
-    //       }
-    //   }
-    public function getJadwalByPoli($idPoli)
-    {
-        $jadwal = $this->jadwalModel
-            ->select('jadwal_periksa.id, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, dokter.nama as nama_dokter')
-            ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
-            ->where('dokter.id_poli', $idPoli) // Filter berdasarkan poli
-            ->where('jadwal_periksa.status', 'aktif') // Hanya jadwal aktif
-            ->findAll();
-
-        dd($jadwal); // Debug data jadwal
-    }
-
+          $jadwal = $builder->findAll();
+      
+          if (!empty($jadwal)) {
+              return $this->response->setJSON(['success' => true, 'jadwal' => $jadwal]);
+          } else {
+              return $this->response->setJSON(['success' => false, 'message' => 'Tidak ada jadwal tersedia.']);
+          }
+      }
       
 
     // Form tambah daftar poli
