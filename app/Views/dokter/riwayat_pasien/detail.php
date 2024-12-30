@@ -13,7 +13,7 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tanggal</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-start" style="padding-left: 24px;">Tanggal</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Pasien</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Dokter</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Keluhan</th>
@@ -22,8 +22,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($detailPeriksa as $periksa): ?>
-                                    <tr>
-                                        <td class="text-center">
+                                    <tr style="padding-top: 16px; padding-bottom: 16px; height: 60px;">
+                                        <td class="text-start" style="padding-left: 24px;">
                                             <p class="text-sm font-weight-medium mb-0"><?= esc($periksa['tanggal_periksa']); ?></p>
                                         </td>
                                         <td>
@@ -41,7 +41,7 @@
                                     </tr>
                                 <?php endforeach; ?>
                                 <?php if (empty($detailPeriksa)): ?>
-                                    <tr>
+                                    <tr style="padding-top: 16px; padding-bottom: 16px; height: 60px;">
                                         <td colspan="5" class="text-center">Tidak ada data periksa.</td>
                                     </tr>
                                 <?php endif; ?>

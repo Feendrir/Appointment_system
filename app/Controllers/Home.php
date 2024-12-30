@@ -4,16 +4,20 @@ namespace App\Controllers;
 
 use App\Models\DokterModel;
 use App\Models\PasienModel;
+use App\Models\DaftarPoliModel;
 
 class Home extends BaseController
 {
     protected $dokterModel;
     protected $pasienModel;
+    protected $daftarPoliModel;
+    
 
     public function __construct()
     {
         $this->dokterModel = new DokterModel();
         $this->pasienModel = new PasienModel();
+        $this->daftarPoliModel = new DaftarPoliModel();
     }
 
     public function index()
@@ -74,23 +78,47 @@ class Home extends BaseController
         }
     }
       
-
     public function dashboardPasien()
     {
-        //dd(session()->get());
-
         if (!session()->get('isLoggedIn') || session()->get('userType') !== 'pasien') {
             echo "<script>alert('Anda harus login sebagai pasien.'); window.location.href='/';</script>";
         }
     
-        $idPasien = session()->get('userId');
+        $idPasien = session()->get('userId'); // Ambil ID pasien dari sesi
         if (!$idPasien) {
             echo "<script>alert('Session tidak valid, silakan login ulang.'); window.location.href='/';</script>";
         }
     
+        // Ambil data daftar poli terakhir
+        $daftarPoliModel = new \App\Models\DaftarPoliModel();
+        $daftarPoliTerakhir = $daftarPoliModel
+            ->select("
+                daftar_poli.*, 
+                poli.nama_poli, 
+                dokter.nama AS nama_dokter, 
+                jadwal_periksa.hari, 
+                jadwal_periksa.jam_mulai, 
+                jadwal_periksa.jam_selesai, 
+                pasien.nama AS nama_pasien,
+                periksa.tanggal_periksa,
+                CASE 
+                    WHEN periksa.id IS NOT NULL THEN 'Sudah Diperiksa' 
+                    ELSE 'Belum Diperiksa' 
+                END AS status_periksa
+            ")
+            ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
+            ->join('jadwal_periksa', 'jadwal_periksa.id = daftar_poli.id_jadwal', 'left')
+            ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
+            ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left') // Tambahkan join ke tabel pasien
+            ->join('periksa', 'periksa.id_daftar_poli = daftar_poli.id', 'left') // Tambahkan join ke tabel periksa
+            ->where('daftar_poli.id_pasien', $idPasien)
+            ->orderBy('daftar_poli.created_at', 'DESC')
+            ->first();
+    
         return view('pages/dashboard-pasien', [
             'title' => 'Dashboard Pasien',
             'userName' => session()->get('userName'),
+            'daftarPoliTerakhir' => $daftarPoliTerakhir, // Kirim data ke view
         ]);
     }    
 

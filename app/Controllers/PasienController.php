@@ -123,10 +123,13 @@ class PasienController extends BaseController
       
           $daftarPoli = $this->daftarPoliModel
               ->select('daftar_poli.*, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, dokter.nama AS nama_dokter, poli.nama_poli')
+              ->select('(CASE WHEN periksa.id IS NOT NULL THEN "Sudah Diperiksa" ELSE "Belum Diperiksa" END) AS status_periksa', false)
               ->join('jadwal_periksa', 'jadwal_periksa.id = daftar_poli.id_jadwal', 'left')
-              ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left') // Ambil dokter dari jadwal_periksa
-              ->join('poli', 'poli.id = daftar_poli.id_poli', 'left') // Ambil poli langsung
+              ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
+              ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
+              ->join('periksa', 'periksa.id_daftar_poli = daftar_poli.id', 'left')
               ->where('daftar_poli.id_pasien', $idPasien)
+              ->orderBy('daftar_poli.created_at', 'DESC') // Urutkan berdasarkan created_at terbaru
               ->paginate(10);
       
           $data = [
@@ -138,7 +141,7 @@ class PasienController extends BaseController
           ];
       
           return view('pasien/daftar_poli/index', $data);
-      }
+      }          
       
       public function getJadwalByPoli($idPoli)
       {
@@ -250,34 +253,38 @@ class PasienController extends BaseController
     }    
   
       // Detail periksa
-      public function detailPeriksa($idDaftarPoli)
+      public function detailPeriksa($id)
       {
-          $idPasien = session()->get('userId');
-      
-          // Ambil data pendaftaran poli
+          // Ambil data daftar poli berdasarkan ID
           $daftarPoli = $this->daftarPoliModel
-              ->select('daftar_poli.*, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, poli.nama_poli, dokter.nama AS nama_dokter')
+              ->select('daftar_poli.*, pasien.nama AS nama_pasien, jadwal_periksa.hari, jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai, dokter.nama AS nama_dokter, poli.nama_poli')
               ->join('jadwal_periksa', 'jadwal_periksa.id = daftar_poli.id_jadwal', 'left')
               ->join('dokter', 'dokter.id = jadwal_periksa.id_dokter', 'left')
               ->join('poli', 'poli.id = daftar_poli.id_poli', 'left')
-              ->where('daftar_poli.id', $idDaftarPoli)
-              ->where('daftar_poli.id_pasien', $idPasien)
+              ->join('pasien', 'pasien.id = daftar_poli.id_pasien', 'left')
+              ->where('daftar_poli.id', $id)
               ->first();
       
           if (!$daftarPoli) {
               return redirect()->to('/pasien/daftar-poli')->with('error', 'Data tidak ditemukan.');
           }
       
-          // Ambil data pemeriksaan
+          // Ambil data pemeriksaan (jika sudah diperiksa)
           $periksa = $this->periksaModel
-              ->where('id_daftar_poli', $idDaftarPoli)
+              ->where('id_daftar_poli', $id)
               ->first();
       
+          // Ambil detail obat yang diresepkan (jika ada)
           $detailObat = [];
           if ($periksa) {
-              $detailObat = $this->detailPeriksaModel->getDetailByPeriksa($periksa['id']);
+              $detailObat = $this->detailPeriksaModel
+                  ->select('obat.nama_obat, obat.kemasan, obat.harga')
+                  ->join('obat', 'obat.id = detail_periksa.id_obat', 'left')
+                  ->where('detail_periksa.id_periksa', $periksa['id'])
+                  ->findAll();
           }
       
+          // Kirim data ke view
           $data = [
               'title' => 'Detail Periksa',
               'breadcrumb' => ['Daftar Poli', 'Detail Periksa'],
@@ -289,6 +296,7 @@ class PasienController extends BaseController
       
           return view('pasien/daftar_poli/detail', $data);
       }
+      
       
       
       

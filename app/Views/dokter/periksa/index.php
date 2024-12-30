@@ -46,16 +46,16 @@
                                     <?php if (!empty($pasien['id_periksa'])): ?>
                                         <span class="badge bg-success">Sudah Diperiksa</span>
                                     <?php else: ?>
-                                        <span class="badge bg-warning">Belum Diperiksa</span>
+                                        <span class="badge bg-secondary">Belum Diperiksa</span> <!-- Warna abu-abu -->
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <?php if (!empty($pasien['id_periksa'])): ?>
                                         <!-- Tombol Edit jika sudah diperiksa -->
-                                        <a href="<?= base_url('dokter/periksa/edit/' . $pasien['id_periksa']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="<?= base_url('dokter/periksa/edit/' . $pasien['id_periksa']); ?>" class="btn btn-dark btn-sm">Edit</a> <!-- Warna hitam -->
                                     <?php else: ?>
                                         <!-- Tombol Periksa jika belum diperiksa -->
-                                        <a href="<?= base_url('dokter/periksa/detail/' . $pasien['id']); ?>" class="btn btn-info btn-sm">Periksa</a>
+                                        <a href="<?= base_url('dokter/periksa/detail/' . $pasien['id']); ?>" class="btn btn-primary btn-sm">Periksa</a> <!-- Warna primary -->
                                     <?php endif; ?>
                                 </td>
                             </tr>

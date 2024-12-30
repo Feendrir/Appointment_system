@@ -21,12 +21,12 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center" style="width: 5%;">No</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">No. RM</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 12%;">No. RM</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">No. KTP</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 25%;">Nama Pasien</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">No. HP</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 30%;">Alamat</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 10%;">Aksi</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 20%;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,8 +36,8 @@
                                         <td class="text-center">
                                             <p class="text-sm font-weight-medium mb-0"><?= $i++; ?></p>
                                         </td>
-                                        <td>
-                                            <p class="text-sm font-weight-medium mb-0"><?= esc($pasien['no_rm']); ?></p>
+                                        <td class="ps-2">
+                                            <p class="text-sm font-weight-bold mb-0"><?= esc($pasien['no_rm']); ?></p>
                                         </td>
                                         <td>
                                             <p class="text-sm font-weight-medium mb-0"><?= esc($pasien['no_ktp']); ?></p>
@@ -52,7 +52,7 @@
                                             <p class="text-sm font-weight-medium mb-0"><?= esc($pasien['alamat']); ?></p>
                                         </td>
                                         <td class="text-center">
-                                            <a href="<?= base_url('dokter/riwayat-pasien/detail/' . $pasien['id_pasien']); ?>" class="btn btn-info btn-sm">
+                                            <a href="<?= base_url('dokter/riwayat-pasien/detail/' . $pasien['id_pasien']); ?>" class="btn btn-primary btn-sm">
                                                 Lihat Detail
                                             </a>
                                         </td>

@@ -31,6 +31,7 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 15%;">Jam Mulai</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 15%;">Jam Selesai</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 10%;">Antrian</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 15%;">Status</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="width: 10%;">Aksi</th>
                                 </tr>
                             </thead>
@@ -58,18 +59,25 @@
                                                 <p class="text-xs font-weight-bold mb-0"><?= esc($poli['jam_selesai'] ?? '-'); ?></p>
                                             </td>
                                             <td class="text-center">
-                                                <span class="badge bg-info"><?= esc($poli['no_antrian'] ?? '-'); ?></span>
+                                                <span class="badge bg-primary"><?= esc($poli['no_antrian'] ?? '-'); ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-<?= $poli['status_periksa'] === 'Sudah Diperiksa' ? 'success' : 'warning'; ?>">
+                                                    <?= esc($poli['status_periksa']); ?>
+                                                </span>
                                             </td>
                                             <td class="text-center">
-                                                <a href="<?= base_url('pasien/daftar-poli/detail/' . $poli['id']); ?>" class="btn btn-info btn-sm">
-                                                    Detail Periksa
+                                                <a href="<?= base_url('pasien/daftar-poli/detail/' . $poli['id']); ?>" 
+                                                   class="btn btn-dark btn-sm d-flex align-items-center justify-content-center"
+                                                   style="width: 35px; height: 35px;">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="8" class="text-center">Tidak ada data riwayat daftar poli.</td>
+                                        <td colspan="9" class="text-center">Tidak ada data riwayat daftar poli.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
